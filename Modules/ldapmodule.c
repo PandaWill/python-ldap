@@ -31,10 +31,13 @@ PyObject* init_ldap_module()
 {
 	PyObject *m, *d;
 
+#ifndef Py_TYPE
+    #define Py_TYPE(ob) (((PyObject*)(ob))->ob_type)
+#endif 
+  
 #if defined(MS_WINDOWS) || defined(__CYGWIN__)
-	LDAP_Type.ob_type = &PyType_Type;
+	Py_TYPE(&LDAP_Type) = &PyType_Type;
 #endif
-
 	/* Create the module and add the functions */
 #if PY_MAJOR_VERSION >= 3
         static struct PyModuleDef ldap_moduledef = {
